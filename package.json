@@ -1,0 +1,22 @@
+{
+  "name": "exams",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha --timeout=10000 --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rock-Script/exams.git"
+  },
+  "author": "Yogesh Murdeshwar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rock-Script/exams/issues"
+  },
+  "homepage": "https://github.com/Rock-Script/exams#readme",
+  "dependencies": {
+    "template": "./template"
+  }
+}

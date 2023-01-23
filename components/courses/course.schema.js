@@ -33,5 +33,6 @@ module.exports.PATCH_COURSE = {
 
 module.exports.UPDATE_COURSE = {
     ...this.PATCH_COURSE,
+    parent: ReferenceSchema.COURSE_PARENT_SCHEMA.optional(),
     modified_at: Joi.date().required()
 }

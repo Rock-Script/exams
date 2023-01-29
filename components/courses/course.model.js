@@ -30,6 +30,10 @@ module.exports.getCourse = async(_id) => {
 
 module.exports.filter = async(filter) => {
     const pipeline = [];
+    const match = {};
+    if (filter.name) match['name'] = new RegExp(filter.name, 'i');
+    if (filter.parent_id) match['parent_id'] = Mongo.id(filter.parent_id);
+    pipeline.push({ $match: match });
     const data = await Mongo.aggregate(COLLECTION_NAME, pipeline);
     return data;
 }

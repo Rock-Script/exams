@@ -7,6 +7,8 @@ module.exports.GET_COURSE = {
 }
 
 module.exports.GET_COURSES = {
+    name: Joi.string().optional(),
+    parent_id: ObjectId().optional(),
     is_tree_view: Joi.boolean().optional().default(false)
 }
 

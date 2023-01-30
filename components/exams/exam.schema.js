@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { ObjectId } = require('../../template/tools/db-validation.tool');
+const { ObjectId, stringObjectIds } = require('../../template/tools/db-validation.tool');
 const ReferenceSchema = require('../../template/schemas/reference.schemas');
 
 module.exports.GET_EXAM = {
@@ -7,6 +7,7 @@ module.exports.GET_EXAM = {
 }
 
 module.exports.GET_EXAMS = {
+    course_ids: stringObjectIds().optional().default(null)
 }
 
 module.exports.POST_EXAM = {

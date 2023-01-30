@@ -42,6 +42,7 @@ module.exports.getExam = async(_id) => {
 }
 
 module.exports.getExams = async(filter) => {
+    if (filter.course_ids) filter.course_ids = filter.course_ids.split(",");
     const exams = await ExamModel.filter(filter);
     return exams;
 }

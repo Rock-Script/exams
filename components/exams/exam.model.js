@@ -30,6 +30,10 @@ module.exports.getExam = async(_id) => {
 
 module.exports.filter = async(filter) => {
     const pipeline = [];
+    const match = {};
+    if (filter.course_ids) match['course_id'] = { $in: Mongo.idArray(filter.course_ids) }
+
+    pipeline.push({ $match: match });
     const data = await Mongo.aggregate(COLLECTION_NAME, pipeline);
     return data;
 }

@@ -43,7 +43,7 @@ module.exports.INSERT_QUESTION = {
 
 module.exports.PATCH_QUESTION = {
     name: Joi.string().optional().min(3).max(100),
-    type: Joi.string().valid(...(_.values(QUESTION_TYPES))).optional(),
+    type: Joi.string().valid(...(_.values(QUESTION_TYPES))).optional().allow(null, ""),
     options: Joi.array().optional()
 }
 

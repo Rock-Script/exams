@@ -30,7 +30,12 @@ module.exports.POST_QUESTION = {
     institute_id: ObjectId().required(),
     name: Joi.string().required().min(3).max(100),
     type: Joi.string().valid(...(_.values(QUESTION_TYPES))).optional().allow(null, ""),
-    options: Joi.array().optional()
+    options: Joi.array().optional(),
+    answer: Joi.alternatives().try(
+        Joi.string(),
+        Joi.number(),
+        Joi.array()
+    ).optional().allow(null)
 }
 
 module.exports.INSERT_QUESTION = {
@@ -44,7 +49,12 @@ module.exports.INSERT_QUESTION = {
 module.exports.PATCH_QUESTION = {
     name: Joi.string().optional().min(3).max(100),
     type: Joi.string().valid(...(_.values(QUESTION_TYPES))).optional().allow(null, ""),
-    options: Joi.array().optional()
+    options: Joi.array().optional(),
+    answer: Joi.alternatives().try(
+        Joi.string(),
+        Joi.number(),
+        Joi.array()
+    ).optional()
 }
 
 module.exports.UPDATE_QUESTION = {

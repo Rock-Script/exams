@@ -1,7 +1,9 @@
+const _ = require('lodash');
 const QuestionModel = require('./question.model');
 const ExamModel = require('../exams/exam.model');
 const HTTP_RESPONSES = require('../../template/contants/http-responses');
 const Reference = require('../../template/tools/reference-tool');
+const QUESTION_TYPES = require('../../template/contants/question-types');
 
 const verifyParams = async (exam_id, params) => {
     if (!exam_id) throw HTTP_RESPONSES.NOT_FOUND('exam id', exam_id);
@@ -19,6 +21,21 @@ const verifyParams = async (exam_id, params) => {
     if (params.institute_id) {
         params.institute = await Reference.getInstitute(params.institute_id);
         if (!params.institute) throw HTTP_RESPONSES.NOT_FOUND('institute', params.institute_id);
+    }
+
+    if (params.answer) {
+        if ([QUESTION_TYPES.SINGLE_SELECT, QUESTION_TYPES.TEXT].includes(params.type) && !_.isString(params.answer)) {
+            throw HTTP_RESPONSES.BAD_REQUEST('Answer should be text');
+        }
+        if (params.type === QUESTION_TYPES.NUMBER) {
+            params.answer = +params.answer;
+            if (_.isNaN(params.answer)) {
+                throw HTTP_RESPONSES.BAD_REQUEST('Answer should be number');
+            }
+        }
+        if (params.type === QUESTION_TYPES.MULTI_SELECT && !_.isArray(params.answer)) {
+            throw HTTP_RESPONSES.BAD_REQUEST('Answer should be an array');
+        }
     }
 
     return params;

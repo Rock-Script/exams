@@ -12,7 +12,7 @@ module.exports.insertQuestion = async(exam_id, payload) => {
     payload.modified_at = new Date();
 
     payload = Validation.validate(QuestionSchema.INSERT_QUESTION, payload);
-    const data = await Mongo.updateOne(
+    await Mongo.updateOne(
         DB_COLLECTIONS.EXAMS, 
         {_id: Mongo.id(exam_id)},
         {

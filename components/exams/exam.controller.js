@@ -27,12 +27,20 @@ module.exports.getExams = async (req, res, next) => {
     }
 }
 
-
 module.exports.patchExam = async (req, res, next) => {
     const data = await ExamService.updateExam(req.params.exam_id, req.body);
     return {
         status: 200,
         data,
         message: 'Successfully created exam'
+    }
+}
+
+module.exports.publishExam = async (req, res, next) => {
+    const data = await ExamService.publishExam(req.params.exam_id);
+    return {
+        status: 200,
+        data,
+        message: 'Successfully published exam'
     }
 }

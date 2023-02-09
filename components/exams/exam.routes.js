@@ -24,9 +24,17 @@ const routes = [
         path: `/${path}/:exam_id`,
         method: ROUTE_METHODS.PATCH,
         validation: {
-            body: ExamSchema.RESET_USER_PASSWORD
+            body: ExamSchema.PATCH_EXAM_PARAMS
         },
         handler: ExamController.patchExam
+    },
+    {
+        path: `/${path}/:exam_id/publish`,
+        method: ROUTE_METHODS.POST,
+        validation: {
+            query: ExamSchema.PUBLISH_EXAM_PARAMS
+        },
+        handler: ExamController.publishExam
     },
     {
         path: `/${path}/:exam_id`,

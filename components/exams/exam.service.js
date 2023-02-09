@@ -35,6 +35,23 @@ module.exports.updateExam = async(_id, params) => {
     return this.getExam(exam._id);
 }
 
+module.exports.publishExam = async(_id) => {
+    const exam = await ExamModel.getExam(_id);
+    if (!exam) {
+        throw HTTP_RESPONSES.NOT_FOUND('exam', _id);
+    }
+
+    if (exam.questions.length === 0) {
+        throw HTTP_RESPONSES.BAD_REQUEST('No question found to publish');
+    }
+
+    const update_response = await ExamModel.publishExam(exam);
+    if (update_response.modifiedCount === 0) {
+        throw HTTP_RESPONSES.INTERNAL_SERVER_ERROR();
+    }
+    return this.getExam(exam._id);
+}
+
 module.exports.getExam = async(_id) => {
     if (!_id) return null;
     const exam = await ExamModel.getExam(_id);

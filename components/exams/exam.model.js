@@ -23,6 +23,17 @@ module.exports.updateExam = async(user_id, payload) => {
     return data;
 }
 
+module.exports.publishExam = async(exam) => {
+    let payload = {};
+    payload.modified_at = new Date();
+    payload.version = (exam.version || 0) + 1;
+    payload.published_questions = exam.questions;
+
+    payload = Validation.validate(ExamSchema.UPDATE_EXAM, payload);
+    const data = await Mongo.updateOne(COLLECTION_NAME, { _id: Mongo.id(exam._id)}, { $set: payload});
+    return data;
+}
+
 module.exports.getExam = async(_id) => {
     const data = await Mongo.findOne(COLLECTION_NAME, { _id: Mongo.id(_id)}, { password: 0 });
     return data;

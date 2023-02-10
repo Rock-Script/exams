@@ -1,7 +1,9 @@
+const _ = require('lodash');
 const Joi = require('joi');
 const { ObjectId, stringObjectIds } = require('../../template/tools/db-validation.tool');
 const ReferenceSchema = require('../../template/schemas/reference.schemas');
 const { INSERT_QUESTION } = require('../questions/question.schema');
+const EXAM_LOG_STATUS = require('../../template/contants/exam-log-status');
 
 module.exports.POST_EXAM_LOG = {
     institute_id: ObjectId().required(),
@@ -10,6 +12,10 @@ module.exports.POST_EXAM_LOG = {
 }
 
 module.exports.GET_EXAM_LOG = {
+    exam_log_id: ObjectId().required()
+}
+
+module.exports.SUBMIT_EXAM_LOG_PARAMS = {
     exam_log_id: ObjectId().required()
 }
 
@@ -32,6 +38,7 @@ module.exports.INSERT_EXAM_LOG = {
     institute: ReferenceSchema.INSTITUTE_SCHEMA.required(),
     questions: Joi.array().items(INSERT_QUESTION).min(1).required(),
     course: ReferenceSchema.COURSE_SCHEMA.optional(),
+    status: Joi.string().valid(...(_.values(EXAM_LOG_STATUS))).optional().default(EXAM_LOG_STATUS.IN_PROGRESS),
     created_at: Joi.date().required(),
     modified_at: Joi.date().required(),
     is_active: Joi.boolean().default(true).optional(),

@@ -18,6 +18,15 @@ module.exports.getExamLog = async(req, res, next) => {
     }
 }
 
+module.exports.submitExamLog = async(req, res, next) => {
+    const data = await ExamLogService.submitExamLog(req.params.exam_log_id);
+    return {
+        status: 200,
+        data,
+        message: 'Successfully submitted exam log'
+    }
+}
+
 module.exports.postAnswer = async(req, res, next) => {
     const data = await ExamLogService.saveAnswer(req.params.exam_log_id, req.params.question_id, req.body);
     return {

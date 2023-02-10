@@ -1,5 +1,6 @@
 const ExamLogModel = require('./exam_log.model');
 const HTTP_RESPONSES = require('../../template/contants/http-responses');
+const EXAM_LOG_STATUS = require('../../template/contants/exam-log-status');
 const Reference = require('../../template/tools/reference-tool');
 
 const verifyParams = async (params) => {
@@ -33,12 +34,25 @@ module.exports.addExamLog = async(params) => {
 module.exports.getExamLog = async(_id) => {
     if (!_id) return null;
     const exam = await ExamLogModel.getExamLog(_id);
-    exam.questions.forEach(q => {
-        delete q.answer;
-    })
+    if (exam.status !== EXAM_LOG_STATUS.COMPLETED) {
+        exam.questions.forEach(q => {
+            delete q.answer;
+        })
+    }
     return exam;
 }
 
+module.exports.submitExamLog = async(exam_log_id) => {
+    const exam_log = await this.getExamLog(exam_log_id);
+    if (!exam_log) {
+        throw HTTP_RESPONSES.NOT_FOUND('exam log', exam_log_id);
+    }
+    await ExamLogModel.submitExamLog(exam_log_id);
+    return {
+        ...exam_log,
+        status: EXAM_LOG_STATUS.COMPLETED
+    };
+}
 
 module.exports.saveAnswer = async(exam_log_id, question_id, params) => {
     const exam_log = await this.getExamLog(exam_log_id);

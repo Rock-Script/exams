@@ -18,7 +18,16 @@ const routes = [
         validation: {
             params: ExamLogSchema.GET_EXAM_LOG
         },
-        handler: ExamLogController.postExamLog
+        handler: ExamLogController.getExamLog
+    },
+    {
+        path: `/${path}/:exam_log_id/:question_id`,
+        method: ROUTE_METHODS.POST,
+        validation: {
+            params: ExamLogSchema.POST_EXAM_LOG_QUESTION_ANSWER_PARAMS,
+            body: ExamLogSchema.POST_EXAM_LOG_QUESTION_ANSWER_BODY
+        },
+        handler: ExamLogController.postAnswer
     }
 ]
 

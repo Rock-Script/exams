@@ -14,8 +14,23 @@ module.exports.insertExamLog = async(payload) => {
     return data;
 }
 
-
 module.exports.getExamLog = async(_id) => {
     const data = await Mongo.findOne(COLLECTION_NAME, { _id: Mongo.id(_id)}, { password: 0 });
     return data;
+}
+
+module.exports.saveAnswer = async(exam_log_id, question_id, answer) => {
+    return Mongo.updateOne(
+        COLLECTION_NAME,
+        {
+            _id: Mongo.id(exam_log_id),
+            "questions._id": Mongo.id(question_id)
+        },
+        {
+            $set: {
+                "questions.$.user_answer": answer,
+                "questions.$.user_answer_updated_at": new Date()
+            }
+        }
+    );
 }

@@ -13,6 +13,18 @@ module.exports.GET_EXAM_LOG = {
     exam_log_id: ObjectId().required()
 }
 
+module.exports.POST_EXAM_LOG_QUESTION_ANSWER_PARAMS = {
+    exam_log_id: ObjectId().required(),
+    question_id: ObjectId().required()
+}
+
+module.exports.POST_EXAM_LOG_QUESTION_ANSWER_BODY = {
+    answer: Joi.alternatives().try(
+        Joi.string(),
+        Joi.number(),
+        Joi.array()
+    ).optional()
+}
 
 module.exports.INSERT_EXAM_LOG = {
     ...this.POST_EXAM_LOG,

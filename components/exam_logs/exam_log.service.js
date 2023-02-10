@@ -33,5 +33,29 @@ module.exports.addExamLog = async(params) => {
 module.exports.getExamLog = async(_id) => {
     if (!_id) return null;
     const exam = await ExamLogModel.getExamLog(_id);
+    exam.questions.forEach(q => {
+        delete q.answer;
+    })
     return exam;
+}
+
+
+module.exports.saveAnswer = async(exam_log_id, question_id, params) => {
+    const exam_log = await this.getExamLog(exam_log_id);
+    if (!exam_log) {
+        throw HTTP_RESPONSES.NOT_FOUND('exam log', exam_log_id);
+    }
+    const question = exam_log.questions.find(q => q._id.toString() === question_id);
+    if (!question) {
+        throw HTTP_RESPONSES.NOT_FOUND('question', question_id);
+    }
+    const save_answer_response = await ExamLogModel.saveAnswer(exam_log_id, question_id, params.answer);
+    if (save_answer_response?.matchedCount) {
+        return {
+            ...question,
+            user_answer: params.answer,
+            answer: params.answer
+        }
+    }
+    return question;
 }

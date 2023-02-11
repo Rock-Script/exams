@@ -18,6 +18,15 @@ module.exports.getExamLog = async(req, res, next) => {
     }
 }
 
+module.exports.getList = async(req, res, next) => {
+    const data = await ExamLogService.getList(req.query);
+    return {
+        status: 200,
+        data,
+        message: 'Successfully retrieved exam log'
+    }
+}
+
 module.exports.submitExamLog = async(req, res, next) => {
     const data = await ExamLogService.submitExamLog(req.params.exam_log_id);
     return {

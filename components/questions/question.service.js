@@ -45,6 +45,7 @@ const verifyParams = async (exam_id, params) => {
 module.exports.addQuestion = async(exam_id, params) => {
     params = await verifyParams(exam_id, params);
     const insert_response = await QuestionModel.insertQuestion(exam_id, params);
+    await ExamModel.updateWeightage(exam_id);
     return insert_response;
 }
 
@@ -62,6 +63,7 @@ module.exports.updateQuestion = async(exam_id, _id, params) => {
     if (update_response.modifiedCount === 0) {
         throw HTTP_RESPONSES.INTERNAL_SERVER_ERROR();
     }
+    await ExamModel.updateWeightage(exam_id);
     return params;
 }
 
@@ -79,16 +81,6 @@ module.exports.deleteQuestion = async(exam_id, _id) => {
     if (update_response.modifiedCount === 0) {
         throw HTTP_RESPONSES.INTERNAL_SERVER_ERROR();
     }
+    await ExamModel.updateWeightage(exam_id);
     return this.getQuestion(exam._id);
-}
-
-module.exports.getQuestion = async(_id) => {
-    if (!_id) return null;
-    const question = await QuestionModel.getQuestion(_id);
-    return question;
-}
-
-module.exports.getQuestions = async(filter) => {
-    const questions = await QuestionModel.filter(filter);
-    return questions;
 }

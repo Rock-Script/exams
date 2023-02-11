@@ -13,6 +13,14 @@ const routes = [
         handler: ExamLogController.postExamLog
     },
     {
+        path: `/${path}`,
+        method: ROUTE_METHODS.GET,
+        validation: {
+            query: ExamLogSchema.GET_EXAM_LOG_LIST
+        },
+        handler: ExamLogController.getList
+    },
+    {
         path: `/${path}/:exam_log_id`,
         method: ROUTE_METHODS.GET,
         validation: {

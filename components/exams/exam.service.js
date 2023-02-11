@@ -49,6 +49,7 @@ module.exports.publishExam = async(_id) => {
     if (update_response.modifiedCount === 0) {
         throw HTTP_RESPONSES.INTERNAL_SERVER_ERROR();
     }
+    await ExamModel.updateWeightage(_id);
     return this.getExam(exam._id);
 }
 

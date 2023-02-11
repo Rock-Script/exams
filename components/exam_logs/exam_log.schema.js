@@ -11,6 +11,12 @@ module.exports.POST_EXAM_LOG = {
     exam_id: ObjectId().required()
 }
 
+module.exports.GET_EXAM_LOG_LIST = {
+    institute_id: ObjectId().required(),
+    course_id: ObjectId().optional(), 
+    exam_id: ObjectId().optional()
+}
+
 module.exports.GET_EXAM_LOG = {
     exam_log_id: ObjectId().required()
 }
@@ -36,6 +42,7 @@ module.exports.INSERT_EXAM_LOG = {
     ...this.POST_EXAM_LOG,
     _id: ObjectId(),
     institute: ReferenceSchema.INSTITUTE_SCHEMA.required(),
+    weightage: Joi.number().optional(),
     questions: Joi.array().items(INSERT_QUESTION).min(1).required(),
     course: ReferenceSchema.COURSE_SCHEMA.optional(),
     status: Joi.string().valid(...(_.values(EXAM_LOG_STATUS))).optional().default(EXAM_LOG_STATUS.IN_PROGRESS),

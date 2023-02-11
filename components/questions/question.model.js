@@ -50,14 +50,3 @@ module.exports.deleteQuestion = async(exam_id, question_id) => {
     );
     return data;
 }
-
-module.exports.getQuestion = async(_id) => {
-    const data = await Mongo.findOne(COLLECTION_NAME, { _id: Mongo.id(_id)}, { password: 0 });
-    return data;
-}
-
-module.exports.filter = async(filter) => {
-    const pipeline = [];
-    const data = await Mongo.aggregate(COLLECTION_NAME, pipeline);
-    return data;
-}

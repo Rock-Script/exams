@@ -48,3 +48,20 @@ module.exports.filter = async(filter) => {
     const data = await Mongo.aggregate(COLLECTION_NAME, pipeline);
     return data;
 }
+
+
+module.exports.updateWeightage = async(_id) => {
+    const exam = await Mongo.findOne(COLLECTION_NAME, { _id: Mongo.id(_id) });
+    const weightage = (exam.questions || []).map(q => q.weightage || 0).reduce((t, n) => t + n);
+    const published_weightage = (exam.published_questions || []).map(q => q.weightage || 0).reduce((t, n) => t + n);
+    await Mongo.updateOne(
+        COLLECTION_NAME,
+        { _id: Mongo.id(_id) },
+        {
+            $set: {
+                weightage,
+                published_weightage
+            }
+        }
+    )   
+}

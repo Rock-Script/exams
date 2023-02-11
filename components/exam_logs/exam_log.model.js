@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const Mongo = require('../../template/tools/mongo.tool');
 const Validation = require('../../template/tools/db-validation.tool');
 const ExamSchema = require('./exam_log.schema');
@@ -20,6 +21,14 @@ module.exports.getExamLog = async(_id) => {
     return data;
 }
 
+module.exports.getExamLogList = async(filter) => {
+    const pipeline = [];
+    const match = {};
+
+    if (_.keys(match).length > 0) pipeline.push({$match: match});
+    return await Mongo.aggregate(COLLECTION_NAME, pipeline);
+}
+
 module.exports.saveAnswer = async(exam_log_id, question_id, answer) => {
     return Mongo.updateOne(
         COLLECTION_NAME,
@@ -36,7 +45,7 @@ module.exports.saveAnswer = async(exam_log_id, question_id, answer) => {
     );
 }
 
-module.exports.submitExamLog = async(exam_log_id) => {
+module.exports.submitExamLog = async(exam_log_id, payload) => {
     return Mongo.updateOne(
         COLLECTION_NAME,
         {
@@ -44,7 +53,7 @@ module.exports.submitExamLog = async(exam_log_id) => {
         },
         {
             $set: {
-                "status": EXAM_LOG_STATUS.COMPLETED 
+                ...payload
             }
         }
     );

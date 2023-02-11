@@ -14,14 +14,6 @@ const routes = [
         handler: QuestionController.postQuestion
     },
     {
-        path: `/${path}`,
-        method: ROUTE_METHODS.GET,
-        validation: {
-            query: QuestionSchema.GET_QUESTIONS
-        },
-        handler: QuestionController.getQuestions
-    },
-    {
         path: `/${path}/:exam_id/:question_id`,
         method: ROUTE_METHODS.PATCH,
         validation: {
@@ -37,14 +29,6 @@ const routes = [
             params: QuestionSchema.DELETE_QUESTION_PARAMS
         },
         handler: QuestionController.deleteQuestion
-    },
-    {
-        path: `/${path}/:question_id`,
-        method: ROUTE_METHODS.GET,
-        validation: {
-            params: QuestionSchema.GET_QUESTION
-        },
-        handler: QuestionController.getQuestion
     }
 ]
 

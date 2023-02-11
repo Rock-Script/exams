@@ -25,7 +25,8 @@ module.exports.addExamLog = async(params) => {
     params = await verifyParams(params);
     params = {
         ...params,
-        questions: params.exam.published_questions
+        questions: params.exam.published_questions,
+        weightage: params.exam.published_weightage
     }
     const insert_response = await ExamLogModel.insertExamLog(params);
     return this.getExamLog(insert_response?.insertedId);
@@ -42,15 +43,44 @@ module.exports.getExamLog = async(_id) => {
     return exam;
 }
 
+module.exports.getList = async(filter) => {
+    const list = ExamLogModel.getExamLogList(filter);
+    return list;
+}
+
 module.exports.submitExamLog = async(exam_log_id) => {
     const exam_log = await this.getExamLog(exam_log_id);
     if (!exam_log) {
         throw HTTP_RESPONSES.NOT_FOUND('exam log', exam_log_id);
     }
-    await ExamLogModel.submitExamLog(exam_log_id);
+    let total_questions = 0, correct_answers = 0, wrong_answers = 0, no_answers = 0, marks_obtained = 0;
+    exam_log.questions.forEach(q => {
+        total_questions++;
+        if (q.user_answer) {
+            if (q.user_answer == q.answer) {
+                correct_answers++;
+                marks_obtained += q.weightage;
+            } else {
+                wrong_answers++;
+            }
+        } else {
+            no_answers++;
+        }
+    })
+    const payload = {
+        submitted_at: new Date(),
+        status: EXAM_LOG_STATUS.COMPLETED,
+        total_questions,
+        correct_answers,
+        wrong_answers,
+        no_answers,
+        marks_obtained
+    }
+    payload.time_taken = new Date(payload.submitted_at).getTime() - new Date(exam_log.created_at).getTime();
+    await ExamLogModel.submitExamLog(exam_log_id, payload);
     return {
         ...exam_log,
-        status: EXAM_LOG_STATUS.COMPLETED
+        ...payload
     };
 }
 

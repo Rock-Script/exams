@@ -29,6 +29,7 @@ module.exports.POST_QUESTION_PARAMS = {
 module.exports.POST_QUESTION = {
     institute_id: ObjectId().required(),
     name: Joi.string().required().min(3).max(100),
+    weightage: Joi.number().min(1).max(100).optional().default(0),
     type: Joi.string().valid(...(_.values(QUESTION_TYPES))).optional().allow(null, ""),
     options: Joi.array().optional(),
     answer: Joi.alternatives().try(
@@ -48,6 +49,7 @@ module.exports.INSERT_QUESTION = {
 
 module.exports.PATCH_QUESTION = {
     name: Joi.string().optional().min(3).max(100),
+    weightage: Joi.number().min(1).max(100).optional(),
     type: Joi.string().valid(...(_.values(QUESTION_TYPES))).optional().allow(null, ""),
     options: Joi.array().optional(),
     answer: Joi.alternatives().try(
